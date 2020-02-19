@@ -1,0 +1,37 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "inputArray": {
+            "type": "array",
+            "metadata": {
+                "description": "string array of ip addresses"
+            }
+        }
+    },
+    "variables": {
+        "outputArray": {
+            "copy": [
+                {
+                    "name": "items",
+                    "count": "[length(parameters('inputArray'))]",
+                    "input": {
+                        "startIpAddress": "[parameters('inputArray')[copyIndex('items')]]", 
+                        "endIpAddress": "[parameters('inputArray')[copyIndex('items')]]"
+                    }
+                }
+            ]
+        }        
+    },
+    "resources": [],
+    "outputs": {
+        "ipRangeDefinitions": {
+            "value": "[variables('outputArray').items]",
+            "type": "array"
+        },
+        "ipCount": {
+            "value": "[length(variables('outputArray'))]",
+            "type": "int"
+        }
+    }
+}
